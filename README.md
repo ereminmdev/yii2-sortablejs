@@ -10,21 +10,41 @@ Based on JavaScript library: https://github.com/RubaXa/Sortable
 
 ## Documentation
 
-See for plugin: https://github.com/RubaXa/Sortable#sortable
+See for clientOptions: https://github.com/RubaXa/Sortable#sortable
 
 ## Use
 
+Insert widget into view:
+
 ```
-echo \ereminmdev\yii2\sortablejs\SortableJs::widget([
+<?= \ereminmdev\yii2\sortablejs\SortableJs::widget([
     'elementSelector' => '.items',
     'clientOptions' => [
         'handle' => '.item-handle',
-        'onUpdate' => new \yii\web\JsExpression('
-            function (evt) {
-                var item = evt.item;
-                ...
-            },
-        '),
     ],
-]);
+]) ?>
+```
+
+or with SortableJsAction action:
+
+- add action to controller:
+
+```
+public function actions()
+{
+    return [
+        'sortable' => [
+            'class' => 'ereminmdev\yii2\sortablejs\SortableJsAction',
+        ],
+    ];
+}
+```
+
+- add widget to view:
+
+```
+<?= SortableJs::widget([
+    'elementSelector' => '.items',
+    'storeSetAction' => Url::toRoute(['/site/sortable', 'model' => Product::className()]),
+]) ?>
 ```
