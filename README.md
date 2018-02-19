@@ -45,6 +45,6 @@ public function actions()
 ```
 <?= SortableJs::widget([
     'elementSelector' => '.items',
-    'storeSetAction' => Url::toRoute(['/site/sortable', 'model' => Product::className()]),
+    'storeSetAction' => Url::toRoute(['/site/sortable', 'model' => Product::class]),
 ]) ?>
 ```
