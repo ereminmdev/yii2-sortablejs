@@ -38,12 +38,13 @@ class SortableJs extends Widget
     public function run()
     {
         if ($this->storeSetAction !== null) {
+            $url = is_array($this->storeSetAction) ? Url::toRoute($this->storeSetAction) : $this->storeSetAction;
             $this->clientOptions = ArrayHelper::merge([
                 'store' => [
                     'get' => new JsExpression('function (sortable) { return []; }'),
                     'set' => new JsExpression('
 function (sortable) {
-    $.post("' . Url::toRoute($this->storeSetAction) . '", {
+    $.post("' . $url . '", {
         order: sortable.toArray(),
         "' . Yii::$app->request->csrfParam . '": "' . Yii::$app->request->csrfToken . '"
     });
