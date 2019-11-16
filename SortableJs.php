@@ -9,7 +9,6 @@ use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 
-
 /**
  * Class SortableJs
  * @package ereminmdev\yii2\sortablejs
@@ -31,7 +30,6 @@ class SortableJs extends Widget
      */
     public $storeSetAction;
 
-
     /**
      * @inheritdoc
      */
@@ -40,6 +38,7 @@ class SortableJs extends Widget
         if ($this->storeSetAction !== null) {
             $url = is_array($this->storeSetAction) ? Url::toRoute($this->storeSetAction) : $this->storeSetAction;
             $this->clientOptions = ArrayHelper::merge([
+                'delay' => 250,
                 'store' => [
                     'get' => new JsExpression('function (sortable) { return []; }'),
                     'set' => new JsExpression('
