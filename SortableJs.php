@@ -46,6 +46,9 @@ class SortableJs extends Widget
         order: sortable.toArray(),
         oldOrder: sortable.oldOrder,
         "' . Yii::$app->request->csrfParam . '": "' . Yii::$app->request->csrfToken . '"
+    })
+    .fail(function() {
+        sortable.sort(sortable.oldOrder);
     });
 }'),
                 ],
