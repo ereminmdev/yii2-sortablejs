@@ -22,7 +22,7 @@ class SortableJs extends Widget
     public $elementSelector = '.items';
     /**
      * @var array the client options
-     * See available options: https://github.com/RubaXa/Sortable#options
+     * See available options: https://github.com/SortableJS/sortablejs#options
      */
     public $clientOptions = [];
     /**
@@ -41,15 +41,15 @@ class SortableJs extends Widget
                 'delay' => 250,
                 'store' => [
                     'get' => new JsExpression('function (sortable) { return []; }'),
-                    'set' => new JsExpression('
-function (sortable) {
+                    'set' => new JsExpression('(sortable) => {
     $.post("' . $url . '", {
         order: sortable.toArray(),
+        oldOrder: sortable.oldOrder,
         "' . Yii::$app->request->csrfParam . '": "' . Yii::$app->request->csrfToken . '"
     });
-}
-'),
+}'),
                 ],
+                'onStart' => new JsExpression('(evt) => { ' . $this->getJsId() . '.oldOrder = ' . $this->getJsId() . '.toArray(); }'),
             ], $this->clientOptions);
         }
 
@@ -64,8 +64,16 @@ function (sortable) {
 
         $view->registerJs('
 $("' . $this->elementSelector . '").each(function() {
-    new Sortable(this, ' . Json::encode($this->clientOptions, JSON_FORCE_OBJECT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');
+    const ' . $this->getJsId() . ' = new Sortable(this, ' . Json::encode($this->clientOptions, JSON_FORCE_OBJECT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');
 });
         ');
+    }
+
+    /**
+     * @return string
+     */
+    public function getJsId()
+    {
+        return 'sortable_' . $this->id;
     }
 }
