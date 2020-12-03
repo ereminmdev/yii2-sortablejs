@@ -40,19 +40,21 @@ class SortableJs extends Widget
             $this->clientOptions = ArrayHelper::merge([
                 'delay' => 250,
                 'store' => [
-                    'get' => new JsExpression('function (sortable) { return []; }'),
+                    'get' => new JsExpression('function (sortable) { sortable.oldOrder = sortable.toArray(); return []; }'),
                     'set' => new JsExpression('(sortable) => {
     $.post("' . $url . '", {
         order: sortable.toArray(),
         oldOrder: sortable.oldOrder,
         "' . Yii::$app->request->csrfParam . '": "' . Yii::$app->request->csrfToken . '"
     })
+    .done(function() {
+        sortable.oldOrder = sortable.toArray();
+    })
     .fail(function() {
         sortable.sort(sortable.oldOrder);
     });
 }'),
                 ],
-                'onStart' => new JsExpression('(evt) => { ' . $this->getJsId() . '.oldOrder = ' . $this->getJsId() . '.toArray(); }'),
             ], $this->clientOptions);
         }
 
@@ -67,16 +69,8 @@ class SortableJs extends Widget
 
         $view->registerJs('
 $("' . $this->elementSelector . '").each(function() {
-    const ' . $this->getJsId() . ' = new Sortable(this, ' . Json::encode($this->clientOptions, JSON_FORCE_OBJECT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');
+    new Sortable(this, ' . Json::encode($this->clientOptions, JSON_FORCE_OBJECT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . ');
 });
         ');
-    }
-
-    /**
-     * @return string
-     */
-    public function getJsId()
-    {
-        return 'sortable_' . $this->id;
     }
 }
