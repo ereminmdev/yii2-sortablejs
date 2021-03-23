@@ -17,18 +17,22 @@ class SortableJs extends Widget
 {
     /**
      * @var string containing one or more CSS selectors separated by commas.
-     * See: https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll
+     * https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll
      */
     public $elementSelector = '.items';
     /**
      * @var array the client options
-     * See available options: https://github.com/SortableJS/sortablejs#options
+     * https://github.com/SortableJS/sortablejs#options
      */
     public $clientOptions = [];
     /**
      * @var string|array route to store sortable ids
      */
     public $storeSetAction;
+    /**
+     * @var bool
+     */
+    public $destroyOldBeforeThis = false;
 
     /**
      * @inheritdoc
@@ -66,6 +70,10 @@ class SortableJs extends Widget
         $view = $this->getView();
 
         SortableJsAsset::register($view);
+
+        if ($this->destroyOldBeforeThis) {
+            $view->registerJs('if (Sortable.active) Sortable.active.destroy();');
+        }
 
         $view->registerJs('
 $("' . $this->elementSelector . '").each(function() {

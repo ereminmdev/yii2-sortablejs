@@ -10,7 +10,7 @@ Based on JavaScript library: https://github.com/RubaXa/Sortable
 
 ## Documentation
 
-See for clientOptions: https://github.com/RubaXa/Sortable#sortable
+ClientOptions: https://github.com/RubaXa/Sortable#sortable
 
 ## Use
 
@@ -40,7 +40,7 @@ public function actions()
 }
 ```
 
-- add widget to view:
+- add widget into view:
 
 ```
 <?= SortableJs::widget([
@@ -48,3 +48,15 @@ public function actions()
     'storeSetAction' => Url::toRoute(['/site/sortable', 'model' => Product::class]),
 ]) ?>
 ```
+
+## Tips
+
+To refresh after ajax:
+
+- add into view before widget
+
+```
+$this->registerJs('if (Sortable.active) Sortable.active.destroy();');
+```
+
+- or set `destroyOldBeforeThis` widget option to `true`
