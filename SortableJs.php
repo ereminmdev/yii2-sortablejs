@@ -35,7 +35,7 @@ class SortableJs extends Widget
     public $destroyOldBeforeThis = false;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function run()
     {
