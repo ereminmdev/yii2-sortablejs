@@ -6,7 +6,7 @@ Based on JavaScript library: https://github.com/RubaXa/Sortable
 
 ## Install
 
-``composer require ereminmdev/yii2-sortablejs``
+``composer require --prefer-dist ereminmdev/yii2-sortablejs``
 
 ## Documentation
 

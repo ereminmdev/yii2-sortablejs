@@ -45,12 +45,13 @@ class SortableJsAction extends Action
 
         $ids = Yii::$app->request->post($this->postParam, []);
         if (count($ids) < 2) {
-            throw new InvalidConfigException("Count of items of parameter `$this->postParam` is less than 2.");
+            // Count of items in parameter `$this->postParam` is less than 2.
+            return;
         }
 
         $oldIds = Yii::$app->request->post($this->postOldParam, []);
         if (count($oldIds) != count($ids)) {
-            throw new InvalidConfigException("Count of items of parameters `$this->postParam` and `$this->postOldParam` is not equal.");
+            throw new InvalidConfigException("Count of items in parameters `$this->postParam` and `$this->postOldParam` is not equal.");
         }
 
         $models = $class::find()
@@ -59,7 +60,7 @@ class SortableJsAction extends Action
             ->all();
 
         if (count($models) != count($ids)) {
-            throw new InvalidConfigException("Count of items of parameter `$this->postParam` and found models `$this->postOldParam` is not equal.");
+            throw new InvalidConfigException("Count of items in parameter `$this->postParam` and found models `$this->postOldParam` is not equal.");
         }
 
         $positions = [];
@@ -68,7 +69,11 @@ class SortableJsAction extends Action
         }
 
         foreach ($ids as $idx => $id) {
-            $model = $models[$id];
+            $model = $models[$id] ?? false;
+            $position = $positions[$idx] ?? false;
+
+            if (($model === false) || ($position === false)) continue;
+
             $model->setAttribute($this->sortAttribute, $positions[$idx]);
             $model->save();
         }
